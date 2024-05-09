@@ -14,11 +14,24 @@ namespace game1
         private int size;
         private int elementXY;
         private int maxHint;
+        private PictureBox[,] pictureBox;
         public LevelBuilder(int size, int maxHint, int elementXY)
         {
             this.size = size;
             this.maxHint = maxHint;
             this.elementXY = elementXY;
+
+            pictureBox = new PictureBox[size, size];
+        }
+
+        public PictureBox[,] GetBoxes()
+        {
+            return pictureBox;
+        }
+
+        public void fillBoxes(PictureBox boxes, int i, int j)
+        {
+            this.pictureBox[i,j] = boxes;
         }
 
         public int getSize()
