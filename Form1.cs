@@ -8,32 +8,59 @@ namespace game1
     public partial class Form1 : Form
     {
         public Dictionary<int, LevelBuilder> levels = new Dictionary<int, LevelBuilder>();
-        List<PictureBox> numBoxes = new List<PictureBox>();
 
-        public int[,] map = new int[8,8];
-        public Label[,] labels = new Label[8,8];
-        public PictureBox[,] pics = new PictureBox[8,8];
+        public int[,] map;
+        public Label[,] labels;
+        public PictureBox[,] pics;
+        LevelBuilder level;
+        int size;
+
         int score = 0;
+        int score2 = 0;
+        string nick;
+        bool isWin = false;
 
-
-
-        public Form1()
+        public Form1(int lvl, string nick)
         {
             InitializeComponent();
+            initLevels();
+
+            LevelBuilder chosenLevel = levels[lvl];
+            level = chosenLevel;
+            map = new int[level.getSize(), level.getSize()];
+            labels = new Label[level.getSize(), level.getSize()];
+            pics = new PictureBox[level.getSize(), level.getSize()];
+            size = level.getSize();
+
             this.KeyDown += new KeyEventHandler(OnKeyboardPressed);
             map[0, 0] = 1;
             map[0, 1] = 1;
-            createMap();
-            CreatePics();
-            GenerateNewPic();
+
+            initHint(level);
+            createMap(level);
+            CreatePics(level);
+            level.GenerateNewPic(map, pics, labels, this);
+            this.nick = nick;
+        }
+
+        private void initHint(LevelBuilder level)
+        {
+            label2.Text = level.getHint().ToString();
+        }
+
+        private void initLevels()
+        {
+            levels.Add(1, new LevelBuilder(4, 2048, 50));
+            levels.Add(2, new LevelBuilder(6, 4096, 50));
+            levels.Add(3, new LevelBuilder(8, 8192, 30));
         }
 
 
-        private void createMap()
+        private void createMap(LevelBuilder level)
         {
-            for (int i = 0; i < 4; i++)
+            for (int i = 0; i < level.getSize(); i++)
             {
-                for (int j = 0; j < 4; j++)
+                for (int j = 0; j < level.getSize(); j++)
                 {
                     PictureBox pic = new PictureBox();
                     pic.Location = new Point(12 + 56 * j, 73 + 56 * i);
@@ -45,255 +72,147 @@ namespace game1
             }
         }
 
-        private void GenerateNewPic()
-        {
-            Random rnd = new Random();
-            int a = rnd.Next(0, 4);
-            int b = rnd.Next(0, 4);
-            while (pics[a, b] != null)
-            {
-                a = rnd.Next(0, 4);
-                b = rnd.Next(0, 4);
-            }
-            map[a, b] = 1;
-            pics[a, b] = new PictureBox();
-            labels[a, b] = new Label();
-            labels[a, b].Text = "2";
-            labels[a, b].Size = new Size(50, 50);
-            labels[a, b].TextAlign = ContentAlignment.MiddleCenter;
-            labels[a, b].Font = new Font(new FontFamily("Microsoft Sans Serif"), 15);
-            pics[a, b].Controls.Add(labels[a, b]);
-            pics[a, b].Location = new Point(12 + b * 56, 73 + 56 * a);
-            pics[a, b].Size = new Size(50, 50);
-            pics[a, b].BackColor = Color.Yellow;
-            this.Controls.Add(pics[a, b]);
-            pics[a, b].BringToFront();
-        }
 
-        private void CreatePics()
-        {
-            pics[0, 0] = new PictureBox();
-            labels[0, 0] = new Label();
-            labels[0, 0].Text = "2";
-            labels[0, 0].Size = new Size(50, 50);
-            labels[0, 0].TextAlign = ContentAlignment.MiddleCenter;
-            labels[0, 0].Font = new Font(new FontFamily("Microsoft Sans Serif"), 15);
-            pics[0, 0].Controls.Add(labels[0, 0]);
-            pics[0, 0].Location = new Point(12, 73);
-            pics[0, 0].Size = new Size(50, 50);
-            pics[0, 0].BackColor = Color.Yellow;
-            this.Controls.Add(pics[0, 0]);
-            pics[0, 0].BringToFront();
 
-            pics[0, 1] = new PictureBox();
-            labels[0, 1] = new Label();
-            labels[0, 1].Text = "2";
-            labels[0, 1].Size = new Size(50, 50);
-            labels[0, 1].TextAlign = ContentAlignment.MiddleCenter;
-            labels[0, 1].Font = new Font(new FontFamily("Microsoft Sans Serif"), 15);
-            pics[0, 1].Controls.Add(labels[0, 1]);
-            pics[0, 1].Location = new Point(68, 73);
-            pics[0, 1].Size = new Size(50, 50);
-            pics[0, 1].BackColor = Color.Yellow;
-            this.Controls.Add(pics[0, 1]);
-            pics[0, 1].BringToFront();
+        private void CreatePics(LevelBuilder level)
+        {
+            level.CreatePic(0, 0, 12, 73,pics, labels, this);
+            level.CreatePic(0, 1, 68, 73, pics, labels, this);
         }
 
         private void ChangeColor(int sum, int k, int j)
         {
-            if (sum % 1024 == 0) pics[k, j].BackColor = Color.Pink;
-            else if (sum % 512 == 0) pics[k, j].BackColor = Color.Red;
-            else if (sum % 256 == 0) pics[k, j].BackColor = Color.DarkViolet;
-            else if (sum % 128 == 0) pics[k, j].BackColor = Color.Blue;
-            else if (sum % 64 == 0) pics[k, j].BackColor = Color.Brown;
-            else if (sum % 32 == 0) pics[k, j].BackColor = Color.Coral;
-            else if (sum % 16 == 0) pics[k, j].BackColor = Color.Cyan;
-            else if (sum % 8 == 0) pics[k, j].BackColor = Color.Maroon;
-            else pics[k, j].BackColor = Color.Green;
+            Color[] colors = { Color.Green, Color.Maroon, Color.Cyan, Color.Coral, Color.Brown, Color.Blue, Color.DarkViolet, Color.Red, Color.Pink };
+            int[] divisors = { 1, 8, 16, 32, 64, 128, 256, 512, 1024 };
+
+            for (int i = divisors.Length - 1; i >= 0; i--)
+            {
+                if (sum % divisors[i] == 0)
+                {
+                    pics[k, j].BackColor = colors[i];
+                    return;
+                }
+            }
+            pics[k, j].BackColor = Color.Green;
         }
 
         private void OnKeyboardPressed(object sender, KeyEventArgs e)
         {
+            if (isWin) return;
+
             bool ifPicWasMoved = false;
 
-            switch (e.KeyCode.ToString())
+            int[,] directions = {
+                { 0, 1 },
+                { 0, -1 },
+                { 1, 0 },
+                { -1, 0 }
+            };
+
+            int directionIndex = -1;
+            switch (e.KeyCode)
             {
-                case "Right":
-                    for (int k = 0; k < 4; k++)
-                    {
-                        for (int l = 2; l >= 0; l--)
-                        {
-                            if (map[k, l] == 1)
-                            {
-                                for (int j = l + 1; j < 4; j++)
-                                {
-                                    if (map[k, j] == 0)
-                                    {
-                                        ifPicWasMoved = true;
-                                        map[k, j - 1] = 0;
-                                        map[k, j] = 1;
-                                        pics[k, j] = pics[k, j - 1];
-                                        pics[k, j - 1] = null;
-                                        labels[k, j] = labels[k, j - 1];
-                                        labels[k, j - 1] = null;
-                                        pics[k, j].Location = new Point(pics[k, j].Location.X + 56, pics[k, j].Location.Y);
-                                    }
-                                    else
-                                    {
-                                        int a = int.Parse(labels[k, j].Text);
-                                        int b = int.Parse(labels[k, j - 1].Text);
-                                        if (a == b)
-                                        {
-                                            ifPicWasMoved = true;
-                                            labels[k, j].Text = (a + b).ToString();
-                                            score += (a + b);
-                                            ChangeColor(a + b, k, j);
-                                            label1.Text = "Score: " + score;
-                                            map[k, j - 1] = 0;
-                                            this.Controls.Remove(pics[k, j - 1]);
-                                            this.Controls.Remove(labels[k, j - 1]);
-                                            pics[k, j - 1] = null;
-                                            labels[k, j - 1] = null;
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                    }
+                case Keys.Right:
+                    directionIndex = 0;
                     break;
-                case "Left":
-                    for (int k = 0; k < 4; k++)
-                    {
-                        for (int l = 1; l < 4; l++)
-                        {
-                            if (map[k, l] == 1)
-                            {
-                                for (int j = l - 1; j >= 0; j--)
-                                {
-                                    if (map[k, j] == 0)
-                                    {
-                                        ifPicWasMoved = true;
-                                        map[k, j + 1] = 0;
-                                        map[k, j] = 1;
-                                        pics[k, j] = pics[k, j + 1];
-                                        pics[k, j + 1] = null;
-                                        labels[k, j] = labels[k, j + 1];
-                                        labels[k, j + 1] = null;
-                                        pics[k, j].Location = new Point(pics[k, j].Location.X - 56, pics[k, j].Location.Y);
-                                    }
-                                    else
-                                    {
-                                        int a = int.Parse(labels[k, j].Text);
-                                        int b = int.Parse(labels[k, j + 1].Text);
-                                        if (a == b)
-                                        {
-                                            ifPicWasMoved = true;
-                                            labels[k, j].Text = (a + b).ToString();
-                                            score += (a + b);
-                                            ChangeColor(a + b, k, j);
-                                            label1.Text = "Score: " + score;
-                                            map[k, j + 1] = 0;
-                                            this.Controls.Remove(pics[k, j + 1]);
-                                            this.Controls.Remove(labels[k, j + 1]);
-                                            pics[k, j + 1] = null;
-                                            labels[k, j + 1] = null;
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                    }
+                case Keys.Left:
+                    directionIndex = 1;
                     break;
-                case "Down":
-                    for (int k = 2; k >= 0; k--)
-                    {
-                        for (int l = 0; l < 4; l++)
-                        {
-                            if (map[k, l] == 1)
-                            {
-                                for (int j = k + 1; j < 4; j++)
-                                {
-                                    if (map[j, l] == 0)
-                                    {
-                                        ifPicWasMoved = true;
-                                        map[j - 1, l] = 0;
-                                        map[j, l] = 1;
-                                        pics[j, l] = pics[j - 1, l];
-                                        pics[j - 1, l] = null;
-                                        labels[j, l] = labels[j - 1, l];
-                                        labels[j - 1, l] = null;
-                                        pics[j, l].Location = new Point(pics[j, l].Location.X, pics[j, l].Location.Y + 56);
-                                    }
-                                    else
-                                    {
-                                        int a = int.Parse(labels[j, l].Text);
-                                        int b = int.Parse(labels[j - 1, l].Text);
-                                        if (a == b)
-                                        {
-                                            ifPicWasMoved = true;
-                                            labels[j, l].Text = (a + b).ToString();
-                                            score += (a + b);
-                                            ChangeColor(a + b, j, l);
-                                            label1.Text = "Score: " + score;
-                                            map[j - 1, l] = 0;
-                                            this.Controls.Remove(pics[j - 1, l]);
-                                            this.Controls.Remove(labels[j - 1, l]);
-                                            pics[j - 1, l] = null;
-                                            labels[j - 1, l] = null;
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                    }
+                case Keys.Down:
+                    directionIndex = 2;
                     break;
-                case "Up":
-                    for (int k = 1; k < 4; k++)
-                    {
-                        for (int l = 0; l < 4; l++)
-                        {
-                            if (map[k, l] == 1)
-                            {
-                                for (int j = k - 1; j >= 0; j--)
-                                {
-                                    if (map[j, l] == 0)
-                                    {
-                                        ifPicWasMoved = true;
-                                        map[j + 1, l] = 0;
-                                        map[j, l] = 1;
-                                        pics[j, l] = pics[j + 1, l];
-                                        pics[j + 1, l] = null;
-                                        labels[j, l] = labels[j + 1, l];
-                                        labels[j + 1, l] = null;
-                                        pics[j, l].Location = new Point(pics[j, l].Location.X, pics[j, l].Location.Y - 56);
-                                    }
-                                    else
-                                    {
-                                        int a = int.Parse(labels[j, l].Text);
-                                        int b = int.Parse(labels[j + 1, l].Text);
-                                        if (a == b)
-                                        {
-                                            ifPicWasMoved = true;
-                                            labels[j, l].Text = (a + b).ToString();
-                                            score += (a + b);
-                                            ChangeColor(a + b, j, l);
-                                            label1.Text = "Score: " + score;
-                                            map[j + 1, l] = 0;
-                                            this.Controls.Remove(pics[j + 1, l]);
-                                            this.Controls.Remove(labels[j + 1, l]);
-                                            pics[j + 1, l] = null;
-                                            labels[j + 1, l] = null;
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                    }
+                case Keys.Up:
+                    directionIndex = 3;
                     break;
             }
+
+            if (directionIndex != -1)
+            {
+                for (int k = 0; k < size; k++)
+                {
+                    for (int l = 0; l < size; l++)
+                    {
+                        if (map[k, l] == 1)
+                        {
+                            int nextK = k + directions[directionIndex, 0];
+                            int nextL = l + directions[directionIndex, 1];
+
+                            while (nextK >= 0 && nextK < size && nextL >= 0 && nextL < size)
+                            {
+                                if (map[nextK, nextL] == 0)
+                                {
+                                    ifPicWasMoved = true;
+                                    MoveTile(k, l, nextK, nextL);
+                                    k = nextK;
+                                    l = nextL;
+                                    nextK += directions[directionIndex, 0];
+                                    nextL += directions[directionIndex, 1];
+                                }
+                                else
+                                {
+                                    int a = int.Parse(labels[nextK, nextL].Text);
+                                    int b = int.Parse(labels[k, l].Text);
+                                    if (a == b)
+                                    {
+                                        ifPicWasMoved = true;
+                                        MergeTiles(k, l, nextK, nextL, a + b);
+                                        break;
+                                    }
+                                    else
+                                    {
+                                        break;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+
+            if (score >= level.getHint()) isWin = true;
+            if (isWin)
+                level.showWin(this, nick, score);
+
             if (ifPicWasMoved)
-                GenerateNewPic();
+                level.GenerateNewPic(map, pics, labels, this);
         }
-       }
+
+
+        private void MoveTile(int fromK, int fromL, int toK, int toL)
+        {
+            map[toK, toL] = 1;
+            map[fromK, fromL] = 0;
+            pics[toK, toL] = pics[fromK, fromL];
+            pics[fromK, fromL] = null;
+            labels[toK, toL] = labels[fromK, fromL];
+            labels[fromK, fromL] = null;
+
+            int directionX = (toL - fromL) * 56;
+            int directionY = (toK - fromK) * 56;
+            pics[toK, toL].Location = new Point(pics[toK, toL].Location.X + directionX, pics[toK, toL].Location.Y + directionY);
+        }
+
+        private void MergeTiles(int fromK, int fromL, int toK, int toL, int value)
+        {
+            map[toK, toL] = 1;
+            map[fromK, fromL] = 0;
+
+            labels[toK, toL].Text = value.ToString();
+            
+            if (value >= score)
+                score = value;
+            score2 += value;
+
+            ChangeColor(value, toK, toL);
+
+            count.Text = score.ToString();
+            label5.Text = score2.ToString();
+
+            this.Controls.Remove(pics[fromK, fromL]);
+            this.Controls.Remove(labels[fromK, fromL]);
+            pics[fromK, fromL] = null;
+            labels[fromK, fromL] = null;
+        }
+    }
 
 }
