@@ -14,12 +14,14 @@ namespace game1
         private int size;
         private int elementXY;
         private int maxHint;
+        private int index;
         private PictureBox[,] pictureBox;
-        public LevelBuilder(int size, int maxHint, int elementXY)
+        public LevelBuilder(int size, int maxHint, int elementXY, int index)
         {
             this.size = size;
             this.maxHint = maxHint;
             this.elementXY = elementXY;
+            this.index = index;
 
             pictureBox = new PictureBox[size, size];
         }
@@ -104,6 +106,11 @@ namespace game1
         {
             DataBasse data = new DataBasse();
             data.write(nick, rec);
+
+            string file = "lvl.txt";
+
+            data.writeLvl(file, 1, this.index);
+
             DialogResult result = DialogResult.None;
             result = result = MessageBox.Show("Ваш рекорд записан",
                                 "Победа!", MessageBoxButtons.OK);

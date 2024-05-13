@@ -41,6 +41,7 @@ namespace game1
             CreatePics(level);
             level.GenerateNewPic(map, pics, labels, this);
             this.nick = nick;
+            label5.Text = 0.ToString();
         }
 
         private void initHint(LevelBuilder level)
@@ -50,9 +51,9 @@ namespace game1
 
         private void initLevels()
         {
-            levels.Add(1, new LevelBuilder(4, 2048, 50));
-            levels.Add(2, new LevelBuilder(6, 4096, 50));
-            levels.Add(3, new LevelBuilder(8, 8192, 30));
+            levels.Add(1, new LevelBuilder(4, 2048, 50, 1));
+            levels.Add(2, new LevelBuilder(6, 4096, 50, 2));
+            levels.Add(3, new LevelBuilder(8, 8192, 30, 3));
         }
 
 
@@ -170,7 +171,7 @@ namespace game1
             }
 
             if (score >= level.getHint()) isWin = true;
-            if (isWin)
+            if (isWin) 
                 level.showWin(this, nick, score);
 
             if (ifPicWasMoved)
@@ -205,8 +206,8 @@ namespace game1
 
             ChangeColor(value, toK, toL);
 
-            count.Text = score.ToString();
-            label5.Text = score2.ToString();
+            count.Text = score2.ToString();
+            label5.Text = score.ToString();
 
             this.Controls.Remove(pics[fromK, fromL]);
             this.Controls.Remove(labels[fromK, fromL]);

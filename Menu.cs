@@ -12,14 +12,26 @@ namespace game1
 {
     public partial class Menu : Form
     {
+        private List<string> excluded_names = new List<string>();
+
         public Menu()
         {
             InitializeComponent();
             lockBlockedLevels();
+            fillExcludedNames();
+
             foreach (RadioButton radio in groupBox1.Controls)
             {
                 radio.Click += radio_Click;
             }
+        }
+
+        private void fillExcludedNames()
+        {
+            excluded_names.Add(" ");
+            excluded_names.Add("");
+            excluded_names.Add("введите ник");
+            excluded_names.Add("Введите нмк");
         }
 
         private void Menu_Load(object sender, EventArgs e)
@@ -29,7 +41,7 @@ namespace game1
 
         private void start_button_Click(object sender, EventArgs e)
         {
-            if (textBox1.Text == "") return;
+            if (excluded_names.Contains(textBox1.Text)) return;
             string ID = textBox1.Text;
             int lvl = chooseLvl();
             Form1 game = new Form1(lvl, ID);
@@ -40,9 +52,11 @@ namespace game1
 
         private void lockBlockedLevels()
         {
-            int data = 3;
+            DataBasse data = new DataBasse();
+            string score = "lvl.txt";
+            int lvl = (int)data.ReadSingleDigit(score);
 
-            switch (data)
+            switch (lvl)
             {
                 case 1:
                     level2.Enabled = false;
@@ -98,6 +112,11 @@ namespace game1
         private void textBox1_Click(object sender, EventArgs e)
         {
             textBox1.Text = "";
+        }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+
         }
     }
 }
