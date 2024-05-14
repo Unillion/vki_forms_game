@@ -118,44 +118,21 @@ namespace game1
             if (result == DialogResult.OK)
                 form.Close();
         }
-        public bool CanMoveBlocks(int[,] map, Label[,] labels)
-        {
-            int[,] directions = {
-                { 0, 1 },
-                { 0, -1 }, 
-                { 1, 0 }, 
-                { -1, 0 } 
-            };
 
-            for (int directionIndex = 0; directionIndex < 4; directionIndex++)
-            {
-                for (int k = 0; k < 4; k++)
-                {
-                    for (int l = 0; l < 4; l++)
-                    {
-                        if (map[k, l] == 1)
-                        {
-                            int nextK = k + directions[directionIndex, 0];
-                            int nextL = l + directions[directionIndex, 1];
+        public void showLose(Form1 form, string nick, int rec)
+        { 
 
-                            if (nextK >= 0 && nextK < 4 && nextL >= 0 && nextL < 4)
-                            {
-                                if (map[nextK, nextL] == 0)
-                                {
-                                    return true;
-                                }
-                                else if (labels[nextK, nextL].Text == labels[k, l].Text)
-                                {
-                                    return true;
-                                }
-                            }
-                        }
-                    }
-                }
+            DialogResult result = DialogResult.None;
+            result = result = MessageBox.Show("Попробуйте еще раз!",
+                                "Увы, проигрыш :(", MessageBoxButtons.OK);
+
+            if (result == DialogResult.OK) {
+                form.Close();
+                Menu menu = new Menu();
+                menu.Show();
             }
-
-            return false;
         }
+
 
 
     }

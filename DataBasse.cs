@@ -13,7 +13,7 @@ namespace game1
         {
             try
             {
-                File.AppendAllLines("data.txt", new string[] {nick + ": " +  record + Environment.NewLine});
+                File.AppendAllLines("data.txt", new string[] {nick + ": " +  record});
             }
             catch (Exception e)
             {
