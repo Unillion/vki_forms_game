@@ -218,36 +218,30 @@ namespace game1
 
         private bool IsGameOver()
         {
-            // Проверяем наличие свободных клеток
             for (int i = 0; i < size; i++)
             {
                 for (int j = 0; j < size; j++)
                 {
                     if (map[i, j] == 0)
                     {
-                        // Если найдена хотя бы одна свободная клетка, игра еще не проиграна
                         return false;
                     }
                 }
             }
 
-            // Если не найдено свободных клеток, проверяем, можно ли объединить соседние блоки
             for (int i = 0; i < size; i++)
             {
                 for (int j = 0; j < size; j++)
                 {
                     int currentTileValue = int.Parse(labels[i, j].Text);
-                    // Проверяем соседние клетки на предмет возможности объединения
                     if ((i < size - 1 && int.Parse(labels[i + 1, j].Text) == currentTileValue) ||
                         (j < size - 1 && int.Parse(labels[i, j + 1].Text) == currentTileValue))
                     {
-                        // Если найдены соседние клетки с одинаковым значением, игра еще не проиграна
                         return false;
                     }
                 }
             }
 
-            // Если не найдено свободных клеток и невозможно сделать ход, игра проиграна
             return true;
         }
     }
