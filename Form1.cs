@@ -20,6 +20,8 @@ namespace game1
         string nick;
         bool isWin = false;
 
+        public int sum = 0;
+
         public Form1(int lvl, string nick)
         {
             InitializeComponent();
@@ -33,13 +35,12 @@ namespace game1
             size = level.getSize();
 
             this.KeyDown += new KeyEventHandler(OnKeyboardPressed);
-            map[0, 0] = 1;
-            map[0, 1] = 1;
 
             initHint(level);
             createMap(level);
-            CreatePics(level);
             level.GenerateNewPic(map, pics, labels, this);
+            level.GenerateNewPic(map, pics, labels, this);
+
             this.nick = nick;
             label5.Text = 0.ToString();
         }
@@ -73,15 +74,7 @@ namespace game1
             }
         }
 
-
-
-        private void CreatePics(LevelBuilder level)
-        {
-            level.CreatePic(0, 0, 12, 73,pics, labels, this);
-            level.CreatePic(0, 1, 68, 73, pics, labels, this);
-        }
-
-        private void ChangeColor(int sum, int k, int j)
+        public void ChangeColor(int sum, int k, int j)
         {
             Color[] colors = { Color.Green, Color.Maroon, Color.Cyan, Color.Coral, Color.Brown, Color.Blue, Color.DarkViolet, Color.Red, Color.Pink };
             int[] divisors = { 1, 8, 16, 32, 64, 128, 256, 512, 1024 };
@@ -113,16 +106,16 @@ namespace game1
             int directionIndex = -1;
             switch (e.KeyCode)
             {
-                case Keys.Right:
+                case Keys.D:
                     directionIndex = 0;
                     break;
-                case Keys.Left:
+                case Keys.A:
                     directionIndex = 1;
                     break;
-                case Keys.Down:
+                case Keys.S:
                     directionIndex = 2;
                     break;
-                case Keys.Up:
+                case Keys.W:
                     directionIndex = 3;
                     break;
             }
@@ -157,6 +150,7 @@ namespace game1
                                     {
                                         ifPicWasMoved = true;
                                         MergeTiles(k, l, nextK, nextL, a + b);
+                                        sum = (a + b);
                                         break;
                                     }
                                     else

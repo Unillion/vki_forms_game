@@ -43,7 +43,7 @@
             // start_button
             // 
             this.start_button.BackColor = System.Drawing.Color.BurlyWood;
-            this.start_button.Font = new System.Drawing.Font("Minecraft Ten font cyrillic", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.start_button.Font = new System.Drawing.Font("Impact", 15.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             this.start_button.Location = new System.Drawing.Point(123, 143);
             this.start_button.Name = "start_button";
             this.start_button.Size = new System.Drawing.Size(287, 62);
@@ -55,7 +55,7 @@
             // button2
             // 
             this.button2.BackColor = System.Drawing.Color.BurlyWood;
-            this.button2.Font = new System.Drawing.Font("Minecraft Ten font cyrillic", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.button2.Font = new System.Drawing.Font("Impact", 15.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             this.button2.ForeColor = System.Drawing.Color.Black;
             this.button2.Location = new System.Drawing.Point(123, 211);
             this.button2.Name = "button2";
@@ -70,7 +70,7 @@
             this.level1.AutoSize = true;
             this.level1.Location = new System.Drawing.Point(20, 19);
             this.level1.Name = "level1";
-            this.level1.Size = new System.Drawing.Size(100, 22);
+            this.level1.Size = new System.Drawing.Size(107, 27);
             this.level1.TabIndex = 2;
             this.level1.TabStop = true;
             this.level1.Tag = "1";
@@ -82,7 +82,7 @@
             this.level2.AutoSize = true;
             this.level2.Location = new System.Drawing.Point(20, 42);
             this.level2.Name = "level2";
-            this.level2.Size = new System.Drawing.Size(102, 22);
+            this.level2.Size = new System.Drawing.Size(110, 27);
             this.level2.TabIndex = 3;
             this.level2.TabStop = true;
             this.level2.Tag = "2";
@@ -94,7 +94,7 @@
             this.level3.AutoSize = true;
             this.level3.Location = new System.Drawing.Point(20, 65);
             this.level3.Name = "level3";
-            this.level3.Size = new System.Drawing.Size(102, 22);
+            this.level3.Size = new System.Drawing.Size(110, 27);
             this.level3.TabIndex = 4;
             this.level3.TabStop = true;
             this.level3.Tag = "3";
@@ -106,7 +106,7 @@
             this.groupBox1.Controls.Add(this.level1);
             this.groupBox1.Controls.Add(this.level3);
             this.groupBox1.Controls.Add(this.level2);
-            this.groupBox1.Font = new System.Drawing.Font("Minecraft Ten font cyrillic", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.groupBox1.Font = new System.Drawing.Font("Impact", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             this.groupBox1.Location = new System.Drawing.Point(416, 105);
             this.groupBox1.Name = "groupBox1";
             this.groupBox1.Size = new System.Drawing.Size(200, 100);
@@ -118,11 +118,11 @@
             // textBox1
             // 
             this.textBox1.BackColor = System.Drawing.Color.BurlyWood;
-            this.textBox1.Font = new System.Drawing.Font("Minecraft Ten font cyrillic", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.textBox1.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             this.textBox1.ForeColor = System.Drawing.SystemColors.WindowFrame;
             this.textBox1.Location = new System.Drawing.Point(123, 118);
             this.textBox1.Name = "textBox1";
-            this.textBox1.Size = new System.Drawing.Size(138, 26);
+            this.textBox1.Size = new System.Drawing.Size(138, 20);
             this.textBox1.TabIndex = 6;
             this.textBox1.Text = "введите ник";
             this.textBox1.Click += new System.EventHandler(this.textBox1_Click);
@@ -130,11 +130,11 @@
             // button1
             // 
             this.button1.BackColor = System.Drawing.Color.Tan;
-            this.button1.Font = new System.Drawing.Font("Minecraft Ten font cyrillic", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.button1.Font = new System.Drawing.Font("Impact", 15.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             this.button1.ForeColor = System.Drawing.SystemColors.ControlText;
-            this.button1.Location = new System.Drawing.Point(378, 12);
+            this.button1.Location = new System.Drawing.Point(354, 12);
             this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(168, 60);
+            this.button1.Size = new System.Drawing.Size(192, 60);
             this.button1.TabIndex = 7;
             this.button1.Text = "показать таблицу рекордов";
             this.button1.UseVisualStyleBackColor = false;

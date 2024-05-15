@@ -42,13 +42,13 @@
             this.dataGridView1.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dataGridView1.Location = new System.Drawing.Point(12, 12);
             this.dataGridView1.Name = "dataGridView1";
-            this.dataGridView1.Size = new System.Drawing.Size(283, 285);
+            this.dataGridView1.Size = new System.Drawing.Size(283, 98);
             this.dataGridView1.TabIndex = 0;
             // 
             // button1
             // 
             this.button1.BackColor = System.Drawing.Color.Tan;
-            this.button1.Font = new System.Drawing.Font("Minecraft Ten font cyrillic", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.button1.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             this.button1.Location = new System.Drawing.Point(12, 333);
             this.button1.Name = "button1";
             this.button1.Size = new System.Drawing.Size(283, 77);

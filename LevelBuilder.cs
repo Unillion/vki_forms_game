@@ -75,17 +75,22 @@ namespace game1
             int spacing = 56;
 
             int a, b;
+            int rand = rnd.Next(1, 11);
+
             do
             {
                 a = rnd.Next(gridSize);
                 b = rnd.Next(gridSize);
             } while (pics[a, b] != null);
 
+            if (rand <= 9) rand = 2;
+            else rand = 4;
+
             map[a, b] = 1;
 
             PictureBox pic = new PictureBox();
             Label label = new Label();
-            label.Text = "2";
+            label.Text = rand.ToString();
             label.Size = new Size(cellSize, cellSize);
             label.TextAlign = ContentAlignment.MiddleCenter;
             label.Font = new Font("Microsoft Sans Serif", 15);
@@ -93,13 +98,17 @@ namespace game1
             pic.Controls.Add(label);
             pic.Location = new Point(12 + b * spacing, 73 + a * spacing);
             pic.Size = new Size(cellSize, cellSize);
-            pic.BackColor = Color.Yellow;
+
+            if (rand == 2) pic.BackColor = Color.Yellow; 
+            else if (rand == 4) pic.BackColor= Color.Green; 
+
 
             form.Controls.Add(pic);
             pic.BringToFront();
 
             pics[a, b] = pic;
             labels[a, b] = label;
+
         }
 
         public void showWin(Form1 form, string nick, int rec)
