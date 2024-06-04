@@ -33,7 +33,7 @@ namespace game1
 
         public void fillBoxes(PictureBox boxes, int i, int j)
         {
-            this.pictureBox[i,j] = boxes;
+            this.pictureBox[i, j] = boxes;
         }
 
         public int getSize()
@@ -41,7 +41,7 @@ namespace game1
             return this.size;
         }
 
-        public int getHint() 
+        public int getHint()
         {
             return this.maxHint;
         }
@@ -67,7 +67,7 @@ namespace game1
             pics[row, col].BringToFront();
         }
 
-        public void GenerateNewPic(int[,] map ,PictureBox[,] pics, Label[,] labels, Form1 form)
+        public void GenerateNewPic(int[,] map, PictureBox[,] pics, Label[,] labels, Form1 form)
         {
             Random rnd = new Random();
             int gridSize = this.getSize();
@@ -99,8 +99,8 @@ namespace game1
             pic.Location = new Point(12 + b * spacing, 73 + a * spacing);
             pic.Size = new Size(cellSize, cellSize);
 
-            if (rand == 2) pic.BackColor = Color.Yellow; 
-            else if (rand == 4) pic.BackColor= Color.Green; 
+            if (rand == 2) pic.BackColor = Color.Yellow;
+            else if (rand == 4) pic.BackColor = Color.Green;
 
 
             form.Controls.Add(pic);
@@ -129,13 +129,14 @@ namespace game1
         }
 
         public void showLose(Form1 form, string nick, int rec)
-        { 
+        {
 
             DialogResult result = DialogResult.None;
             result = result = MessageBox.Show("Попробуйте еще раз!",
                                 "Увы, проигрыш :(", MessageBoxButtons.OK);
 
-            if (result == DialogResult.OK) {
+            if (result == DialogResult.OK)
+            {
                 form.Close();
                 Menu menu = new Menu();
                 menu.Show();

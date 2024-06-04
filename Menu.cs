@@ -24,6 +24,7 @@ namespace game1
             {
                 radio.Click += radio_Click;
             }
+            initLevelLabel();
         }
 
         private void fillExcludedNames()
@@ -37,6 +38,15 @@ namespace game1
         private void Menu_Load(object sender, EventArgs e)
         {
 
+        }
+
+        private void initLevelLabel()
+        {
+            DataBasse data = new DataBasse();
+            string score = "lvl.txt";
+            int lvl = (int)data.ReadSingleDigit(score);
+
+            label1.Text = "Доступные уровни: " + lvl.ToString();
         }
 
         private void start_button_Click(object sender, EventArgs e)

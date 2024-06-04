@@ -17,37 +17,52 @@ namespace game1
             InitializeComponent();
 
             DataBasse data = new DataBasse();
-            InitializeDataGridView();
+            InitializeDataGridView(dataGridView1);
+            InitializeDataGridView(dataGridView2);
+            InitializeDataGridView(dataGridView3);
+
             ShowTopThreeScores(data.ReadStringArray("data.txt"));
         }
 
-        private void InitializeDataGridView()
+        private void InitializeDataGridView(DataGridView grid)
         {
             DataGridViewTextBoxColumn nameColumn = new DataGridViewTextBoxColumn();
             nameColumn.HeaderText = "Name";
             DataGridViewTextBoxColumn scoreColumn = new DataGridViewTextBoxColumn();
             scoreColumn.HeaderText = "Score";
-            dataGridView1.Columns.Add(nameColumn);
-            dataGridView1.Columns.Add(scoreColumn);
+            grid.Columns.Add(nameColumn);
+            grid.Columns.Add(scoreColumn);
         }
 
         private void ShowTopThreeScores(List<string> data)
         {
-            List<Tuple<string, int>> scores = new List<Tuple<string, int>>();
+            var levelScores = new Dictionary<int, List<Tuple<string, int>>>();
+
             foreach (string entry in data)
             {
                 string[] parts = entry.Split(':');
                 if (parts.Length >= 2)
                 {
                     string name = parts[0].Trim();
-                    int score;
-                    if (int.TryParse(parts[1].Trim(), out score))
+                    string[] scoreLevel = parts[1].Trim().Split(' ');
+                    if (scoreLevel.Length == 2)
                     {
-                        scores.Add(new Tuple<string, int>(name, score));
+                        if (int.TryParse(scoreLevel[0], out int score) && int.TryParse(scoreLevel[1], out int level))
+                        {
+                            if (!levelScores.ContainsKey(level))
+                            {
+                                levelScores[level] = new List<Tuple<string, int>>();
+                            }
+                            levelScores[level].Add(new Tuple<string, int>(name, score));
+                        }
+                        else
+                        {
+                            MessageBox.Show($"Ошибка преобразования оценки или уровня в число для строки: {entry}");
+                        }
                     }
                     else
                     {
-                        MessageBox.Show($"Ошибка преобразования оценки в число для строки: {entry}");
+                        MessageBox.Show($"Некорректный формат строки: {entry}");
                     }
                 }
                 else
@@ -56,13 +71,21 @@ namespace game1
                 }
             }
 
-            scores.Sort((x, y) => y.Item2.CompareTo(x.Item2));
+            ShowTopScoresForLevel(dataGridView1, levelScores, 1);
+            ShowTopScoresForLevel(dataGridView2, levelScores, 2);
+            ShowTopScoresForLevel(dataGridView3, levelScores, 3);
+        }
 
-            dataGridView1.Rows.Clear();
-
-            foreach (var score in scores.Take(3))
+        private void ShowTopScoresForLevel(DataGridView dataGridView, Dictionary<int, List<Tuple<string, int>>> levelScores, int level)
+        {
+            dataGridView.Rows.Clear();
+            if (levelScores.ContainsKey(level))
             {
-                dataGridView1.Rows.Add(score.Item1, score.Item2);
+                var topScores = levelScores[level].OrderByDescending(x => x.Item2).Take(3);
+                foreach (var score in topScores)
+                {
+                    dataGridView.Rows.Add(score.Item1, score.Item2);
+                }
             }
         }
 
